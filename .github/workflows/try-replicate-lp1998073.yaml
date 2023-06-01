@@ -1,0 +1,27 @@
+name: 'Try replicate LP #1998073'
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:	
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+      
+    steps:
+    - uses: actions/checkout@v1
+    - name: 'Linux info'
+      run: lsb_release -a
+    - name: 'Updating ubuntu deps'    
+      run: sudo apt update --fix-missing && sudo apt upgrade -y
+    - name: 'Installing deps'    
+      run: sudo apt install -y android-tools-adb android-tools-fastboot default-jre default-jdk android-sdk
+    - name: 'Exporting android sdk'    
+      run: export ANDROID_SDK_ROOT=/usr/lib/android-sdk
+    - name: 'Download and extract android-cli tools'    
+      run: curl https://dl.google.com/android/repository/commandlinetools-linux-9123335_latest.zip --output commandlinetools-linux-9123335_latest.zip && sudo mkdir /usr/lib/android-sdk/cmdline-tools && sudo unzip -o commandlinetools-linux-9123335_latest.zip -d /usr/lib/android-sdk/cmdline-tools
+    - name: 'Listing commandlinetools.zip'
+      run: unzip -l commandlinetools-linux-9123335_latest.zip
